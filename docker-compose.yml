@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  go_app:
+    build:
+      context: .
+    volumes:
+      - .:/go/src
+    networks:
+      - mongo-migrations-network
+  mongo:
+    image: bitnami/mongodb
+    restart: on-failure
+    environment:
+      - MONGODB_USERNAME=mongo
+      - MONGODB_PASSWORD=mongo
+      - MONGODB_DATABASE=tailor
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MONGODB_ROOT_PASSWORD=mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - mongo-migrations-network
+networks:
+  mongo-migrations-network:
+    driver: bridge
